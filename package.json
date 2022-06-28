@@ -10,6 +10,8 @@
 "license": "ISC",
 "dependencies": {
   "inquirer": "^6.5.2",
-  "express": "^4.16.4"
+  "express": "^4.16.4",
+  "mysql2": "^2.2.1",
+  "sequelize": "^6.3.5"
 }
 }
