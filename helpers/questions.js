@@ -1,5 +1,7 @@
 const mysql = require('mysql2')
 const inquirer = require('inquirer');
+const questions = require('../server')
+require('console.table');
 // Connect to database
 const db = mysql.createConnection(
     {
@@ -15,19 +17,33 @@ const db = mysql.createConnection(
 
 
 class UpdateDataBase {
+  viewAllEmp(){
+    return db.promise().query("SELECT * from employee")
+  };
+
+  getAllRoles(){
+    return db.promise().query("SELECT * FROM role")
+  }
+
+  viewAllDept(){
+    return db.promise().query("SELECT * from department")
+  }
+
  addDept(){
-  inquirer.prompt([{
+  let question = {
     type: "input",
     name: "deptName", 
     message: "What is the name of the department you would like to add?"
-  }])
+  };
+  inquirer.prompt(question)
   .then(response => {
     let newDept = [response.deptName];
-    db.query("INSERT INTO department (name) VALUES (?)", newDept, (err) => {
+    db.query("INSERT INTO department (department_name) VALUES (?)", newDept, (err) => {
       if(err){
         console.log(err);
-      }
-      console.log("Department added");
+      }else{
+        return console.log("Department Added.")
+      } 
     })
   })
 };
@@ -97,11 +113,14 @@ class UpdateDataBase {
     })
 };
 
-// updateEmp(){
-
-// };
+updateEmp(roleId, employeeId){
+  return db.promise().query("UPDATE employee SET role_id = ? WHERE id = ?", [roleId, employeeId], (err) =>{
+    if(err){
+      console.log(err)
+    }
+  })
+};
 };
 
 module.exports = new UpdateDataBase()
 
-//export here and put in the server.js
